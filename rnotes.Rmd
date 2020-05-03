@@ -1,0 +1,618 @@
+---
+title: "rnotes"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+    font-size: 30  
+  theme: !expr sample(c('cosmo','united','yeti'),1)
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R 
+
+## **Introduction to Calculation**
+### Calculator
+```{r , eval=TRUE}
+c(9+6,9*6,9/6,9^6,9%%6,9%/%6,abs(-9))
+```
+### Sequence
+```{r , eval=TRUE}
+1:10;seq(1,10,2)
+```
+### Exponential & logrithm
+```{r eval=TRUE}
+c(exp(10),log(2),log2(2),log10(10))
+```
+### Approximated values
+```{r}
+c(round(165.96253),round(165.96253,digit=3),round(165.96253,digit=-2))
+
+c(signif(165.96253,digit=2),floor(165.96253),ceiling(176.96253),trunc(165.96253))
+```
+### Descriptive statistic
+```{r}
+x<-1:25
+summary(x)
+#If there is a missing value in the set,then the summary will all be NA.Therefore,we should set na.rm=TRUE.
+```
+
+## **Vectors**
+### Numeric vector
+
+ * Use __seq()__ and __rep()__ to construct a vector with similar patterns.
+```{r}
+seq(1,5,by=0.5)
+seq(1,10,length=5)
+rep(3,10)
+rep(seq(2,10,2),2)
+```
+
+ * Use __unique()__ to return the elements that appear at least one time.
+
+ * Use __table()__ to count the number of each element.
+```{r}
+b<-c(1,2,2,2,1,2,3,3,7,2,3,4,1,7)
+unique(b)
+table(b)
+```
+
+ * Use __union__(vector1,vector2) to find all elements between two vectors.
+
+ * Use __intersect__(v1,v2) to find the same elements between two vectors.
+
+ * Use __setdiff__(v1,v2) to find the difference between two vectors but only find the different elements in v1.
+
+ * Use __setequal__(v1,v2) to find if v1 is the same as v2.
+```{r}
+B<-c(4,1,7,2,3);C<-c(12,2,3,1)
+union(B,C)
+intersect(B,C)
+setdiff(B,C)
+setequal(B,C)
+```
+
+ * Use __sort()__ or __order()__ to sort a vector or grt the position or sorting a vector.
+
+```{r}
+d<-c(3,4,2,5,7,23,4,8,11)
+sort(d)
+sort(d,decreasing=TRUE)
+inc.order<-order(d)
+dec.order<-order(d,decreasing=TRUE)
+inc.order
+d[inc.order]
+dec.order
+d[dec.order]
+```
+
+ * To __change values__ in a vector
+```{r}
+d<-c(3,4,2,5,7,23,4,8,11)
+d[5]<-6
+d[7]<-2
+d
+```
+
+ * To __delete elements__ from a vector
+```{r}
+vt0<-c(1:5) ##create a vector
+vt0[-3]
+```
+
+### Character vector
+
+-The vector is made up of strings of characters.
+-All elements of a vector must be of the same type.
+```{r}
+colors<-c('yellow','blue','RED','white')
+more.colors<-c(colors,'pink','purple')
+more.colors
+```
+ * Use __substr()__ to take substring.
+
+ * Use __grep()__ to search a string from a vector
+
+ * Use __paste()__ to build up strings.
+
+```{r}
+colors<-c('yellow','blue','RED','white')
+more.colors<-c(colors,'pink','purple')
+substr(colors,1,3)
+grep('e',more.colors)
+paste(colors,'line')  ##with space
+paste(colors,'line',sep="")  ##with no space
+ 
+```
+__factor()__:factor(x=character())
+```{r}
+colors<-c('yellow','blue','RED','white')
+fc<-factor(colors)
+fc
+levels(fc)
+as.integer(fc) ##transform character into integer
+```
+
+### Logical vector
+
+-Logical words:True(T) or False(F)
+
+1.Boolean operations
+-> Use __sum()__ to count how many TRUE in a vecotr.
+```{r}
+D<-c(T,T,T,F,F,T)
+sum(D)
+sum(!D) ##count how many FALSE
+```
+
+2.Type of __is. series__
+
+ * is.null():check if it is a null vector
+
+ * is.na():check if there is a missing value
+
+ * is.nan():check if there is not a number in a vector
+
+ * is.infinite():check if a vector is infinite
+
+ * is.character():check if value in a vector is the type of character
+
+ * is.integer():check if value in a vector is the type of integer
+
+ * is.numeric():check if value in avector is the type of number
+
+```{r}
+x1<-1:5
+x2<-c(1:3,2.2)
+x3<-c('red','blue','white')
+c(is.integer(x1),is.numeric(x1))
+c(is.character(x3),is.null(x2))
+```
+3.Use "class()" to identify the type of a vector
+
+
+## **Matrix**
+
+ * Use __rbind()__ or __cbind()__ to construct
+```{r}
+a<-1:5;b<-6:10;c<-11:15;d<-16:20
+M1<-rbind(a,b,c,d) ##by row
+M1;dim(M1)
+M2<-cbind(a,b,c,d) ##by column
+M2;dim(M2)
+```
+
+ * Construct by a __long vector__
+```{r}
+X<-1:20
+matrix(X,nrow=5,ncol=4,byrow=TRUE)
+```
+
+ * Use __column names__ or __row names__ to add names
+```{r}
+colnames(M1)<-c('V1','V2','V3','V4','V5')
+dimnames(M1)
+```
+
+ * Use __[ ]__ to __extract elements__ from a matrix
+```{r}
+M1[2,4]
+M1[,3]
+M1[c(2,4), ]
+M1[10]
+M1[c('b','c'), c('V1','V5')]
+```
+
+ * Use __t()__ to create transpose matrix
+ 
+ * Use **%*%** to evaluate multiplication of matrices
+ 
+ * Use __diag()__ to make diagonal matrix
+ 
+ * Use __det()__ to count determinant
+ 
+ * Use __solve()__ to create inverse matrix
+ 
+ * Use __eigen()__ to evaluate eigen value and eigen vector
+```{r}
+A <- matrix(c(1:4),2,2)
+B <- matrix(c(5:8),2,2)
+t(A)
+A %*% B
+diag(A)
+det(B)
+solve(B)
+eigen(A)
+```
+ 
+## **Controlflow**
+
+### For() loop
+
+ * allows one to specify that a certain operation should be repeated a fixed number of times.
+
+**syntax**
+
+**`for(index in vector) commands` **
+
+where
+
+ * index: the index is changed each time
+ * vector: it includes all possible cases
+ * commands: actions 
+
+```{r}
+## evaluate n!
+n<-10
+ans <- 1
+for (j in n:1){
+  ans <- ans*j
+}
+ans
+```
+
+### if() statement
+
+**syntax**
+
+**`if(condition) {commands when TRUE}`**
+
+**`if(condition) {commands when TRUE} else {commands when FALSE}`**
+
+(The else part is __optional__)
+
+**format** could be :
+
+if(condition1){
+
+commands when condition1 is TRUE
+
+} else if (condition2){
+
+commands when condition2 is TRUE
+
+}else{
+
+commands when condition1 and condition2 are FALSE
+
+
+}
+
+```{r}
+basket <- c('r','b','y','y','y','r','r','r','r')
+n.r <-0; n.b<-0; n.y <-0
+for(i in 1:length(basket)){
+  if(basket[i]=='r'){
+    n.r <- n.r+1
+  }else if(basket[i]=="b"){
+    n.b <- n.b + 1
+  }else{
+    n.y <- n.y + 1
+  }
+}
+c(n.r, n.b, n.y)
+```
+
+### While() loop
+
+ * The pattern of repetition isn't known in advance and we need to do some calculations and keep going as a condition holds.
+
+ * while(): need the initial, condition of stopping, and iteration or replacement
+
+**syntax**
+
+**`while(condition) statements`**
+
+```{r}
+## fibonacci number
+fib1<-1
+fib2<-1
+fibonacci <- c(fib1)
+while (fib2 < 100){
+  fibonacci <- c(fibonacci, fib2)
+  fib1 <- fibonacci[length(fibonacci) - 1]
+  fib2 <- fib1 + fibonacci[length(fibonacci)]
+}
+fibonacci
+```
+
+
+### Break, repeat, and next
+
+ * **break** : cause the loop to terminate immediately
+ 
+**`if (condition) break`**
+
+ * **repeat** : repeat until we execute a break statement
+ 
+**`repeat {statements}`**
+
+ * **next** : cause control to return immediately to the top pf the loop
+ 
+```{r}
+Fib1 <- 1
+Fib2 <- 2
+Fibonacci <- c(Fib1)
+repeat
+{
+  if(Fib2 >= 100) break
+    Fibonacci <- c(Fibonacci, Fib2)
+    Fib1 <- Fibonacci[length(Fibonacci) - 1]
+    Fib2 <- Fib1 + Fibonacci[length(Fibonacci)]
+}
+Fibonacci
+```
+
+
+## **Functions**
+
+### Source()
+
+ * After creating and **saving** the script,use it to run the code
+ * Use __print()__ r __cat()__ to show the final answer
+
+#### Different from __print()__ and __cat()__
+
+ * **print()** shows with " " between characters
+ * **cat()** shows without " " between characters
+ 
+```{r}
+k <-1
+while(k<100){
+  fac <-c()
+  for(j in 1:k){
+    if((k %% j) == 0){
+      fac <- c(fac,j)
+    }
+  }
+  if (k == sum(fac[-length(fac)])){
+    cat(paste(k,"=", sep=" "),
+        paste(fac[-length(fac)], collapse= "+"), "\n")
+  }
+  k<- k+1
+}
+```
+
+
+### With one single output
+
+```{r}
+f <- function(x){
+  4*x+17
+}
+f(3)
+```
+
+ * **return()** or **invisible()**
+
+(if you don't put __return()__ at the end of the function,it will treat the last line as the result automatically.)
+
+```{r}
+make.percent <- function(x){
+  x.percent <- round(100*x, digit=1)
+  x.show <- paste(x.percent, "%", sep=" ")
+  return(x.show)
+}
+make.percent(c(0.1222,0.0417,0.0221,0.0023))
+```
+
+
+### With multiple input variables
+
+```{r}
+perfect.num<- function(a,b){
+  k <-a
+  res <- c()
+  while (k<-b){
+    fac <-c()
+    for(j in 1:k){
+      if((k %% j) == 0) fac <-c(fac,j)
+    }
+    if (k == sum(fac[-length(fac)])){
+      res <- c(res,k)}
+      k <- k+1
+  }
+  return(res)
+}
+#perfect.num(1,10)
+```
+
+### Return multiple output
+
+#### __list()__ : a collection of all type of objects
+
+```{r}
+g<- list(a=3,b=c(1,2,3,4,5),c=c("A","B"))
+g
+```
+
+####  __Extract an element__ from a list
+
+ * **$** : the name of the element
+ * **[[ ]]** : the location or the name of the element
+
+```{r}
+g <- list(a=3 , b= c(1,2,3,4,5), c=c("A","B"))
+g$a
+g[[3]]
+```
+
+#### Use function() and list()
+
+```{r}
+perfect.num <- function(a,b){
+  k<-a
+  res<-c()
+  ans <- list()
+  while (k<b){
+    fac <- c()
+    for(j in 1:k){
+      if ((k%%j) ==0) fac <-c(fac,j)
+    }
+    if (k == sum(fac[-length(fac)])){
+      res <- c(res,k)
+      ans[[paste(k)]] <- fac[-length(fac)]
+    }
+      k<- k+1
+  }
+  ans$num <- res
+  return(ans)
+}
+ANS <- perfect.num(1,10)
+ANS
+```
+
+
+## **DataFrame**
+
+### Data.frame()
+
+ * Use __data.frame()__ to construct data frames from vectors
+ 
+ * Use __str()__ to examine the types of columns in the data frame
+ 
+```{r}
+colorss <- c("red","yellow","white")
+numbers<-c(1,2,3)
+colorss.and.numbers <- data.frame(colorss,numbers,more.numbers=c(4,5,6))
+colorss.and.numbers
+
+###the difference from the matrix
+#x<-matrix(NA,3,3) 這行已經判定矩陣內的元素為文字形
+#x[,1]<-c("red","yelloe"."white")
+#x[,2]<-c(1,2,3)
+#x[,3]<-c(4,5,6)
+#colnames(x)<-c("colors","numbers","more.numbers")
+#x
+
+str(colorss.and.numbers)
+```
+ 
+ * Use __stringAsFactor = FLASE__ to change the type from factor to character
+
+```{r}
+colorss.and.numbers <- data.frame(colorss,numbers,more.numbers=c(4,5,6),stringsAsFactors = FALSE)
+str(colorss.and.numbers)
+```
+
+ * Add column and row vectors into a dataframe
+   * column : use _$_ or __cbind()__ (matrix can't use _$_)
+   * row : use __rbind()__
+   
+```{r}
+colorss <- c("red","yellow","white")
+number1<-c(1,2,3)
+number2 <- c(10,11,12)
+colors.and.numbers <- data.frame(colorss,number1)
+colors.and.numbers $ more.numbers <-c(4,5,6) ##add one column
+colors.and.numbers <-cbind(colors.and.numbers,number2)
+colors.and.numbers
+```
+   
+### Data input and output at hard disk
+
+ * Change the dirtectory: __setwd("dir")__
+ * Find the directory: __get()__
+ * **dump**(objects,file="xxx.R")
+ * Use __load()__ to retrieve data
+ * Use __write.table__(X,file="xxx.txtx")
+ * Use __write.csv__(X,file="xxx,csv)
+
+## **Graphics**
+
+### Statistic Figures
+
+ * Histogram: hist(x)
+ * Boxplot: boxplot(x)
+   -> 中間線為中位數,圖形上下短線為1.5IQR
+ * Density plot: plot(density(x))
+ * Pie chart: pie(x)
+ * Barchart: barplot(x)
+ * **plot(x,y)** : scatter plot for the correlation between teo variables(**cor(x,y)** : the correlation of two variables)
+ * **pairs()** to see scatter plots for nultiple variables
+ 
+### Create a plot region with specifical items
+
+ * **Type**: "p":points, "l": lines, "b": both lines and points, "o": lines pass through points, "h": the lines between points and x-axis, "n": no content
+ 
+ * **par(mfrow= c(2,3))** ## split plot ranges
+ * **pch**: change the type of points
+ * **cex**: size of points
+ * **cex.main** : size of the title
+ * **cex.axis** : size of the labels of ticks of an axis
+ * **cex.lab** : size the labels of the name of an axis
+ * **lty** : the style of lines
+ * **lwd** : the width of lines
+ * **col** : colors
+ * **main** : main title(at the top)
+ * **sub** : sub title(at the bottom)
+ * **x,ylab** : name of x-axis,y-axis
+ * **x,ylim** : ranges of variables
+ * **curve(expression,range)**: the curve of function
+
+### Add some objects to the existing plot
+
+ * **points()** : add points
+ 
+ * **lines()** : add lines
+ 
+ * **abline()** : add straight lines
+ 
+ * **layout()** : split the whole plot by some locations of plot
+
+## **Apply**
+
+### Function : apply()
+
+#### Return a vector or array or list of values obtained by applying a finction to margins of __an array or a matrix__
+
+**apply(X, MARGIN, FUN,...)**
+
+ * **X**: array or matrix
+ * **MARGIN**: for a matrix 1:rows, 2:columns
+ * **FUN**: name of a function
+```{r}
+A <- matrix(rnorm(10),5,2)
+apply(A,1,sum); rowSums(A)
+```
+ 
+### Function: lapply()
+
+#### Returns a list of the same length as X, each element of which is the result of applying FUN to the corresponding element of X
+
+**lapply(X,FUN...)**
+
+ * **X**: vector or data frame of list
+ * **FUN**: name of a function
+```{r}
+cc<- list(a=1:10,beta=exp(-3:3))
+lapply(cc,mean)
+```
+
+### Function: sapply()
+
+#### Similarly to lassply(X,FUN,...) if sapply(x,f,simplify=FALSE, USE.NAMES=FALSE)
+
+**sapply(X,FUN,...simplify=TRUE)**
+
+ * **X**: vector or data frame or list
+ * **FUN** : name of a function
+ * **simplify** : logical; TRUE will return an array or a matrix with the same length of output
+ 
+```{r}
+sapply(cc,summary,simplify = FALSE)
+```
+ 
+```{r}
+d<-list(a=sample(1:10,10,replace=TRUE),
+        b=sample(1:5,20,replace=TRUE))
+sapply(D,unique)
+sapply(D,table)
+
+```
+
